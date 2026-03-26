@@ -1,0 +1,4 @@
+/gui_env
+.venv
+gui_env/
+venv/
