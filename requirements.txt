@@ -1,21 +1,21 @@
-# streamlit
-# numpy>=2.0.0
-# scikit-learn>=1.8.0
-# joblib>=1.3.2
-# pandas
-# tensorflow>=2.16.0
-# librosa
-# opencv-python-headless
-# pillow
-# soundfile
+streamlit
+numpy>=2.0.0
+scikit-learn>=1.8.0
+joblib>=1.3.2
+pandas
+tensorflow>=2.16.0
+librosa
+opencv-python-headless
+pillow
+soundfile
 
-streamlit==1.32.0
-numpy==1.26.4
-pandas==2.2.1
-scikit-learn==1.4.2
-joblib==1.3.2
-tensorflow-cpu==2.15.0
-librosa==0.10.1
-opencv-python-headless==4.9.0.80
-pillow==10.2.0
-soundfile==0.12.1
+# streamlit==1.32.0
+# numpy==1.26.4
+# pandas==2.2.1
+# scikit-learn==1.4.2
+# joblib==1.3.2
+# tensorflow-cpu==2.15.0
+# librosa==0.10.1
+# opencv-python-headless==4.9.0.80
+# pillow==10.2.0
+# soundfile==0.12.1
