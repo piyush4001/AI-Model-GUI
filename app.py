@@ -1,4 +1,40 @@
+import os
+import warnings
+
 import streamlit as st
+
+os.environ.setdefault("TF_CPP_MIN_LOG_LEVEL", "2")
+os.environ.setdefault("TF_ENABLE_ONEDNN_OPTS", "0")
+
+
+def load_legacy_joblib(path):
+    import joblib
+
+    try:
+        from sklearn.exceptions import InconsistentVersionWarning
+    except Exception:
+        InconsistentVersionWarning = None
+
+    with warnings.catch_warnings():
+        if InconsistentVersionWarning is not None:
+            warnings.simplefilter("ignore", InconsistentVersionWarning)
+        return joblib.load(path)
+
+
+def get_tensorflow():
+    import tensorflow as tf
+
+    tf.get_logger().setLevel("ERROR")
+
+    try:
+        import absl.logging
+
+        absl.logging.set_verbosity(absl.logging.ERROR)
+        absl.logging.set_stderrthreshold(absl.logging.ERROR)
+    except Exception:
+        pass
+
+    return tf
 
 # =========================
 # 🎨 CUSTOM DARK UI
@@ -83,13 +119,12 @@ st.markdown("---")
 # =========================
 if option == "📱 Mobile Price":
 
-    import joblib
     import numpy as np
     import pandas as pd
 
     st.header("📱 Mobile Price Prediction")
 
-    pipeline = joblib.load("models/numeric/mobile_pipeline.pkl")
+    pipeline = load_legacy_joblib("models/numeric/mobile_pipeline.pkl")
     model = pipeline["model"]
     scaler = pipeline["scaler"]
     features = pipeline["features"]
@@ -227,11 +262,9 @@ if option == "📱 Mobile Price":
 # =========================
 elif option == "🎬 Movie Review":
 
-    import joblib
+    st.header("🎬 Sentiment Analysis of Movie Reviews")
 
-    st.header("🎬 Sentiment Analysis")
-
-    pipeline = joblib.load("models/text/sentiment_pipeline.pkl")
+    pipeline = load_legacy_joblib("models/text/sentiment_pipeline.pkl")
 
     model = pipeline["model"]
     vectorizer = pipeline["vectorizer"]
@@ -257,11 +290,11 @@ elif option == "🎬 Movie Review":
 # =========================
 elif option == "🩺 Pneumonia":
 
-    import tensorflow as tf
+    tf = get_tensorflow()
     from PIL import Image
     import numpy as np
 
-    st.header("🩺 Pneumonia Detection")
+    st.header("🩺 Pneumonia Detection From X-ray")
 
     @st.cache_resource
     def load_model():
@@ -273,7 +306,7 @@ elif option == "🩺 Pneumonia":
 
     if file:
         img = Image.open(file).convert("RGB")
-        st.image(img, use_container_width=True)
+        st.image(img, width="stretch")
 
         if st.button("🔍 Predict", key="img_btn"):
             img = img.resize((224,224))
@@ -292,19 +325,18 @@ elif option == "🩺 Pneumonia":
 # =========================
 elif option == "🎧 Emotion":
 
-    import tensorflow as tf
+    tf = get_tensorflow()
     import librosa
     import numpy as np
-    import joblib
 
-    st.header("🎧 Emotion Detection")
+    st.header("🎧 Emotion Detection through audio")
 
     @st.cache_resource
     def load_audio():
         return tf.keras.models.load_model("models/audio/audio_model.keras")
 
     model = load_audio()
-    le = joblib.load("models/audio/audio_label_encoder.pkl")
+    le = load_legacy_joblib("models/audio/audio_label_encoder.pkl")
 
     file = st.file_uploader("Upload WAV", type=["wav"])
 
@@ -338,12 +370,12 @@ elif option == "🎧 Emotion":
 # =========================
 elif option == "🎥 Action":
 
-    import tensorflow as tf
+    tf = get_tensorflow()
     import cv2
     import numpy as np
     import tempfile
 
-    st.header("🎥 Action Recognition")
+    st.header("🎥 Action Recognition for sports")
 
     @st.cache_resource
     def load_video():
