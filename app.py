@@ -243,7 +243,7 @@ if option == "📱 Mobile Price":
         # ⚠️ IMPORTANT: choose ONE depending on your pipeline
 
         # 👉 If model is pipeline:
-        pred = model.predict(df)[0]
+       # pred = model.predict(df)[0]
 
         # 👉 If model is NOT pipeline, use this instead:
         arr = scaler.transform(df)
